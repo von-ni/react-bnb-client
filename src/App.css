@@ -1,5 +1,5 @@
 * {
-  font-family: 'Bruno Ace SC', 'Castoro Titling', sans-serif;
+  font-family: "Bruno Ace SC", "Castoro Titling", sans-serif;
 }
 
 /*Rooms*/
@@ -168,10 +168,10 @@ hr {
   align-items: center;
 }
 .order-container {
-  background-color: blanchedalmond;
+  background-color: white;
   color: grey;
-  border-radius: 5rem;
-  padding: 10px;
+  border-bottom: 1px solid;
+  padding: 20px;
   margin: 10px;
   display: flex;
   flex-wrap: wrap;

@@ -27,13 +27,11 @@ export default function Orders() {
     };
     orderloading();
   }, []);
-  //console.log('___________orderInfo1____________', orderInfo);
   orderInfo.forEach((v) => {
     v.totalPrice = v.datesDetail.reduce((acc, cur) => acc + +cur.price, 0);
     const datesList = v.datesDetail.map((d) =>
       dayjs(new Date(+d.dates.year, +d.dates.month - 1, +d.dates.date))
     );
-    //console.log('___________datesList____________', datesList);
     let min = datesList[0];
     let max = datesList[0];
     datesList.forEach((d) => {
@@ -43,11 +41,9 @@ export default function Orders() {
         max = d;
       }
     });
-    //console.log(min, max);
     v.checkIn = min.format("YYYY-MM-DD");
     v.checkOut = max.add(1, "day").format("YYYY-MM-DD");
   });
-  //console.log('___________orderInfo2____________', orderInfo);
   return isErrorMsg ? (
     <div className="container">
       <h5 style={{ paddingTop: "50px" }}>Currently no bookings are made.</h5>
@@ -57,6 +53,7 @@ export default function Orders() {
       <h1>Orders</h1>
       {orderInfo.map((v, i) => (
         <div key={i} className="order-container">
+          <div>Room: {v.roomType}</div>
           <div>Check-in: {v.checkIn}</div>
           <div>Check-out:{v.checkOut}</div>
           <div>Total:{(v.totalPrice * 1.13).toFixed(2)} CAD</div>
