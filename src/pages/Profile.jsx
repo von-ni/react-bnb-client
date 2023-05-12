@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Form, Input, Alert } from 'antd';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, Alert } from "antd";
+import { SERVER_URL } from "../config";
 
 const formItemLayout = {
   labelCol: {
@@ -40,20 +41,17 @@ export default function Profile(prop) {
 
   const [result, setResult] = useState({
     isVisible: false,
-    message: '',
-    type: '',
+    message: "",
+    type: "",
   });
 
   useEffect(() => {
     const profileLoading = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:5000/api/members/member',
-          {
-            method: 'GET',
-            headers: { 'x-auth-token': localStorage.getItem('token') },
-          }
-        );
+        const response = await fetch(`${SERVER_URL}/members/member`, {
+          method: "GET",
+          headers: { "x-auth-token": localStorage.getItem("token") },
+        });
         const res = await response.json();
         //console.log(res);
         if (response.ok) {
@@ -70,17 +68,17 @@ export default function Profile(prop) {
           setResult({
             isVisible: true,
             message: res.errors[0].msg,
-            type: 'warning',
+            type: "warning",
           });
-          setTimeout(navigate('/Login'), 2000);
+          setTimeout(navigate("/Login"), 2000);
         }
         console.log(res);
       } catch (err) {
         console.log(err);
         setResult({
           isVisible: true,
-          message: 'Error. Please try agian later',
-          type: 'error',
+          message: "Error. Please try agian later",
+          type: "error",
         });
         setTimeout(() => {
           setResult({ isVisible: false });
@@ -90,7 +88,7 @@ export default function Profile(prop) {
     profileLoading();
   });
 
-  const onFinish = async values => {
+  const onFinish = async (values) => {
     // console.log(values);
     const { firstName, lastName, email, password, oldPassword } = values;
 
@@ -101,11 +99,11 @@ export default function Profile(prop) {
       oldPassword,
     };
     try {
-      const response = await fetch('http://localhost:5000/api/members/member', {
-        method: 'PUT',
+      const response = await fetch(`${SERVER_URL}/members/member`, {
+        method: "PUT",
         headers: {
-          'Content-Type': 'Application/json',
-          'x-auth-token': localStorage.getItem('token'),
+          "Content-Type": "Application/json",
+          "x-auth-token": localStorage.getItem("token"),
         },
         body: JSON.stringify(updateMember),
       });
@@ -113,24 +111,24 @@ export default function Profile(prop) {
       if (response.ok) {
         setResult({
           isVisible: true,
-          message: 'Update Success',
-          type: 'success',
+          message: "Update Success",
+          type: "success",
         });
-        localStorage.setItem('token', res.token);
+        localStorage.setItem("token", res.token);
         prop.setLogin(true);
       } else if (response.status === 400) {
         setResult({
           isVisible: true,
           message: res.errors[0].msg,
-          type: 'warning',
+          type: "warning",
         });
       }
     } catch (err) {
       console.log(err);
       setResult({
         isVisible: true,
-        message: 'Error. Please try agian later',
-        type: 'error',
+        message: "Error. Please try agian later",
+        type: "error",
       });
       setTimeout(() => {
         setResult({ isVisible: false });
@@ -141,12 +139,12 @@ export default function Profile(prop) {
   return (
     <div
       style={{
-        maxWidth: '700px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        maxWidth: "700px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
       <div>
@@ -171,7 +169,7 @@ export default function Profile(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your first name.',
+                message: "Please input your first name.",
               },
             ]}
           >
@@ -184,7 +182,7 @@ export default function Profile(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your first name.',
+                message: "Please input your first name.",
               },
             ]}
           >
@@ -196,12 +194,12 @@ export default function Profile(prop) {
             label="E-mail"
             rules={[
               {
-                type: 'email',
-                message: 'The input is not valid E-mail!',
+                type: "email",
+                message: "The input is not valid E-mail!",
               },
               {
                 required: true,
-                message: 'Please input your E-mail!',
+                message: "Please input your E-mail!",
               },
             ]}
           >
@@ -214,12 +212,12 @@ export default function Profile(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: "Please input your password!",
               },
               {
                 pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/,
                 message:
-                  'Password has to be 8 or more characters with at least one uppercase, lowercase and number.',
+                  "Password has to be 8 or more characters with at least one uppercase, lowercase and number.",
               },
             ]}
             hasFeedback
@@ -233,12 +231,12 @@ export default function Profile(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: "Please input your password!",
               },
               {
                 pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/,
                 message:
-                  'Password has to be 8 or more characters with at least one uppercase, lowercase and number.',
+                  "Password has to be 8 or more characters with at least one uppercase, lowercase and number.",
               },
             ]}
             hasFeedback
@@ -249,21 +247,21 @@ export default function Profile(prop) {
           <Form.Item
             name="confirm"
             label="Confirm Password"
-            dependencies={['password']}
+            dependencies={["password"]}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: 'Please confirm your password!',
+                message: "Please confirm your password!",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
+                  if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
                     new Error(
-                      'The two passwords that you entered do not match!'
+                      "The two passwords that you entered do not match!"
                     )
                   );
                 },

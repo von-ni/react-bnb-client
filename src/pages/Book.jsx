@@ -52,13 +52,10 @@ export default function Book() {
   useEffect(() => {
     const profileLoading = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/api/members/member",
-          {
-            method: "GET",
-            headers: { "x-auth-token": localStorage.getItem("token") },
-          }
-        );
+        const response = await fetch(`${SERVER_URL}/members/member`, {
+          method: "GET",
+          headers: { "x-auth-token": localStorage.getItem("token") },
+        });
         const res = await response.json();
         //console.log(res);
         if (response.ok) {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Checkbox, Form, Input, Alert, Modal } from 'antd';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Checkbox, Form, Input, Alert, Modal } from "antd";
+import { SERVER_URL } from "../config";
 
 const formItemLayout = {
   labelCol: {
@@ -37,12 +38,12 @@ export default function Register(prop) {
   const navigate = useNavigate();
   const [result, setResult] = useState({
     isVisible: false,
-    message: '',
-    type: '',
+    message: "",
+    type: "",
   });
   const [form] = Form.useForm();
 
-  const onFinish = async values => {
+  const onFinish = async (values) => {
     const { firstName, lastName, email, password } = values;
     const newMember = {
       name: { firstName, lastName },
@@ -50,30 +51,30 @@ export default function Register(prop) {
       password,
     };
     try {
-      const response = await fetch('http://localhost:5000/api/members/member', {
-        method: 'POST',
-        headers: { 'Content-Type': 'Application/json' },
+      const response = await fetch(`${SERVER_URL}/members/member`, {
+        method: "POST",
+        headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(newMember),
       });
       const res = await response.json();
       if (response.ok) {
         setResult({
           isVisible: true,
-          message: 'Register Success',
-          type: 'success',
+          message: "Register Success",
+          type: "success",
         });
-        localStorage.setItem('token', res.token);
+        localStorage.setItem("token", res.token);
         prop.setLogin(true);
-        navigate('/');
+        navigate("/");
       } else if (response.status === 400) {
         setResult({
           isVisible: true,
           message: res.errors[0].msg,
-          type: 'warning',
+          type: "warning",
         });
         setTimeout(() => {
           setResult({ isVisible: false });
-          navigate('/login');
+          navigate("/login");
         }, 3000);
       }
       //console.log(res);
@@ -82,8 +83,8 @@ export default function Register(prop) {
       setResult({
         isVisible: true,
         message:
-          'Sorry, we are not available to serve you right now. Please come back to us later.',
-        type: 'error',
+          "Sorry, we are not available to serve you right now. Please come back to us later.",
+        type: "error",
       });
       setTimeout(() => {
         setResult({ isVisible: false });
@@ -93,7 +94,7 @@ export default function Register(prop) {
 
   const showAgreement = () => {
     Modal.info({
-      title: 'Ageement',
+      title: "Ageement",
       content: (
         <div>
           <p>Etiam semper ligula lorem, vel suscipit tortor vehicula non.</p>
@@ -111,12 +112,12 @@ export default function Register(prop) {
   return (
     <div
       style={{
-        maxWidth: '700px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        maxWidth: "700px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
       <div>
@@ -142,7 +143,7 @@ export default function Register(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your first name.',
+                message: "Please input your first name.",
               },
             ]}
           >
@@ -155,7 +156,7 @@ export default function Register(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your first name.',
+                message: "Please input your first name.",
               },
             ]}
           >
@@ -167,12 +168,12 @@ export default function Register(prop) {
             label="E-mail"
             rules={[
               {
-                type: 'email',
-                message: 'The input is not valid E-mail!',
+                type: "email",
+                message: "The input is not valid E-mail!",
               },
               {
                 required: true,
-                message: 'Please input your E-mail!',
+                message: "Please input your E-mail!",
               },
             ]}
           >
@@ -185,12 +186,12 @@ export default function Register(prop) {
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: "Please input your password!",
               },
               {
                 pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d]{8,}$/,
                 message:
-                  'Password has to be 8 or more characters with at least one uppercase, lowercase and number.',
+                  "Password has to be 8 or more characters with at least one uppercase, lowercase and number.",
               },
             ]}
             hasFeedback
@@ -201,21 +202,21 @@ export default function Register(prop) {
           <Form.Item
             name="confirm"
             label="Confirm Password"
-            dependencies={['password']}
+            dependencies={["password"]}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: 'Please confirm your password!',
+                message: "Please confirm your password!",
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
+                  if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(
                     new Error(
-                      'The two passwords that you entered do not match!'
+                      "The two passwords that you entered do not match!"
                     )
                   );
                 },
@@ -233,18 +234,18 @@ export default function Register(prop) {
                 validator: (_, value) =>
                   value
                     ? Promise.resolve()
-                    : Promise.reject(new Error('Should accept agreement')),
+                    : Promise.reject(new Error("Should accept agreement")),
               },
             ]}
             {...tailFormItemLayout}
           >
             <Checkbox>
-              I have read the{' '}
+              I have read the{" "}
               <span
                 style={{
-                  textDecoration: 'underline',
-                  color: '#0804f9',
-                  textDecorationColor: '#0804f9',
+                  textDecoration: "underline",
+                  color: "#0804f9",
+                  textDecorationColor: "#0804f9",
                 }}
                 onClick={showAgreement}
               >

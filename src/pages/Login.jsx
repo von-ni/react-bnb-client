@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Checkbox, Form, Input, Alert } from 'antd';
+import { SERVER_URL } from "../config";
 
 export default function Login(prop) {
   const navigate = useNavigate();
@@ -15,9 +16,9 @@ export default function Login(prop) {
     const { email, password } = values;
     const newLogin = { email, password };
     try {
-      const response = await fetch('http://localhost:5000/api/auth/member', {
-        method: 'POST',
-        headers: { 'Content-Type': 'Application/json' },
+      const response = await fetch(`${SERVER_URL}/auth/member`, {
+        method: "POST",
+        headers: { "Content-Type": "Application/json" },
         body: JSON.stringify(newLogin),
       });
       const res = await response.json();
